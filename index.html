@@ -37,9 +37,9 @@
     --green-soft: #142a1e;
     --shadow: rgba(0,0,0,0.4);
   }
-
+ 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   body {
     font-family: var(--sans);
     background: var(--bg);
@@ -48,7 +48,7 @@
     transition: background 0.3s, color 0.3s;
     line-height: 1.5;
   }
-
+ 
   /* Header */
   header {
     border-bottom: 1px solid var(--border);
@@ -113,7 +113,7 @@
     gap: 6px;
   }
   .theme-btn:hover { border-color: var(--accent); color: var(--text); }
-
+ 
   /* Information page nav button in header */
   .info-nav-btn {
     background: var(--accent);
@@ -134,18 +134,18 @@
   .info-nav-btn:hover { background: #b33d26; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(200,75,49,0.3); }
   .info-nav-btn.active { background: #1a1714; }
   [data-theme="dark"] .info-nav-btn.active { background: #f0ece4; color: #1a1714; }
-
+ 
   /* Page views */
   .page { display: none; }
   .page.active { display: block; }
-
+ 
   /* Main */
   main {
     max-width: 960px;
     margin: 0 auto;
     padding: 40px 24px 80px;
   }
-
+ 
   .hero {
     text-align: center;
     margin-bottom: 48px;
@@ -166,7 +166,7 @@
     margin: 0 auto;
     font-weight: 400;
   }
-
+ 
   /* Tabs */
   .tabs {
     display: flex;
@@ -200,14 +200,14 @@
     box-shadow: inset 0 0 0 1px var(--border);
   }
   .tab-btn:hover:not(.active) { color: var(--text); background: var(--surface); opacity: 0.7; }
-
+ 
   /* Panel */
   .panel {
     display: none;
     animation: fadeUp 0.3s ease;
   }
   .panel.active { display: block; }
-
+ 
   /* Card */
   .card {
     background: var(--surface);
@@ -235,7 +235,7 @@
     background: var(--accent);
     border-radius: 2px;
   }
-
+ 
   /* Hash input */
   .hash-input-wrap { position: relative; }
   .hash-input {
@@ -267,7 +267,7 @@
     transition: color 0.2s;
   }
   .clear-btn:hover { color: var(--accent); }
-
+ 
   .identify-btn {
     margin-top: 12px;
     width: 100%;
@@ -289,7 +289,7 @@
   }
   .identify-btn:hover { background: #b33d26; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,75,49,0.3); }
   .identify-btn:active { transform: none; }
-
+ 
   /* Result */
   .result-box {
     margin-top: 16px;
@@ -338,7 +338,7 @@
     font-family: var(--mono);
   }
   .error-box.visible { display: block; }
-
+ 
   /* Known types grid */
   .types-grid {
     display: grid;
@@ -356,7 +356,7 @@
   }
   .type-chip .name { font-weight: 600; color: var(--text); }
   .type-chip .bits { color: var(--text2); font-size: 10px; margin-top: 2px; }
-
+ 
   /* File upload */
   .dropzone {
     border: 2px dashed var(--border);
@@ -382,7 +382,7 @@
   .dropzone-icon { font-size: 36px; margin-bottom: 12px; }
   .dropzone-text { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
   .dropzone-sub { font-size: 13px; color: var(--text2); }
-
+ 
   .file-info {
     display: none;
     align-items: center;
@@ -397,7 +397,7 @@
   .file-info.visible { display: flex; }
   .file-name { font-family: var(--mono); font-weight: 600; color: var(--green); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .file-size { color: var(--text2); font-family: var(--mono); font-size: 12px; }
-
+ 
   .generate-btn {
     margin-top: 12px;
     width: 100%;
@@ -418,7 +418,7 @@
   }
   .generate-btn:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
   .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-
+ 
   .hash-results {
     display: none;
     flex-direction: column;
@@ -469,7 +469,7 @@
   }
   .copy-btn:hover { border-color: var(--accent2); color: var(--accent2); }
   .copy-btn.copied { border-color: var(--green); color: var(--green); }
-
+ 
   /* CAPTCHA */
   .captcha-wrap {
     background: var(--surface2);
@@ -525,7 +525,7 @@
   .captcha-status { font-size: 12px; font-family: var(--mono); }
   .captcha-status.ok { color: var(--green); }
   .captcha-status.err { color: var(--accent); }
-
+ 
   /* Progress */
   .progress-wrap { margin-top: 12px; display: none; }
   .progress-wrap.visible { display: block; }
@@ -544,7 +544,7 @@
     transition: width 0.1s;
   }
   .progress-text { font-family: var(--mono); font-size: 11px; color: var(--text2); }
-
+ 
   /* Info section */
   .info-row {
     display: grid;
@@ -562,7 +562,7 @@
   .info-card-icon { font-size: 24px; margin-bottom: 10px; }
   .info-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
   .info-card p { font-size: 13px; color: var(--text2); line-height: 1.5; }
-
+ 
   /* Animations */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(12px); }
@@ -579,7 +579,7 @@
   }
   .spinner.visible { display: block; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
+ 
   /* Footer */
   footer {
     border-top: 1px solid var(--border);
@@ -589,16 +589,16 @@
     color: var(--text2);
     font-family: var(--mono);
   }
-
+ 
   @media (max-width: 600px) {
     .hash-row { flex-wrap: wrap; }
     .hash-val { min-width: 100%; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
   }
-
+ 
   /* =============================================
      INFORMATION PAGE STYLES (new — added below)
      ============================================= */
-
+ 
   /* Scroll-reveal base state: hidden and shifted down */
   .reveal {
     opacity: 0;
@@ -611,7 +611,7 @@
     opacity: 1;
     transform: translateY(0);
   }
-
+ 
   /* Stagger children inside a reveal container */
   .reveal-stagger > * {
     opacity: 0;
@@ -623,7 +623,7 @@
   .reveal-stagger.in-view > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay: 0.1s; }
   .reveal-stagger.in-view > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay: 0.2s; }
   .reveal-stagger.in-view > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay: 0.3s; }
-
+ 
   /* Info page hero banner */
   .info-page-hero {
     background: linear-gradient(135deg, var(--accent) 0%, #a0341f 100%);
@@ -659,7 +659,7 @@
     font-size: 14px;
     max-width: 520px;
   }
-
+ 
   /* Section blocks */
   .info-section {
     background: var(--surface);
@@ -668,7 +668,7 @@
     padding: 32px 28px;
     margin-bottom: 20px;
   }
-
+ 
   .info-section-header {
     display: flex;
     align-items: flex-start;
@@ -691,7 +691,7 @@
   [data-theme="dark"] .icon-blue  { background: #1e3a5f; }
   [data-theme="dark"] .icon-green { background: #142a1e; }
   [data-theme="dark"] .icon-red   { background: #2a1a17; }
-
+ 
   .info-section-title {
     font-size: 19px;
     font-weight: 800;
@@ -705,7 +705,7 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-
+ 
   .info-section-body {
     font-size: 14.5px;
     color: var(--text2);
@@ -715,7 +715,7 @@
     color: var(--text);
     font-weight: 700;
   }
-
+ 
   /* Pull-quote / highlight stripe */
   .info-pullquote {
     border-left: 3px solid var(--accent);
@@ -728,7 +728,7 @@
     font-style: italic;
     line-height: 1.6;
   }
-
+ 
   /* Stats row */
   .info-stats {
     display: grid;
@@ -757,7 +757,7 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-
+ 
   /* Divider line between sections */
   .info-divider {
     height: 1px;
@@ -765,7 +765,7 @@
     margin: 8px 0 20px;
     border: none;
   }
-
+ 
   /* About-this-tool box at the bottom */
   .about-tool-box {
     background: var(--surface2);
@@ -790,7 +790,7 @@
 </style>
 </head>
 <body>
-
+ 
 <header>
   <div class="header-inner">
     <div class="logo">
@@ -810,13 +810,13 @@
     </div>
   </div>
 </header>
-
+ 
 <main>
   <div class="hero">
     <h1>Identify &amp; Generate<br><em>Hash Signatures</em></h1>
     <p>A forensic-grade tool for cybersecurity analysts to identify hash types and compute cryptographic checksums from files.</p>
   </div>
-
+ 
   <div class="info-row">
     <div class="info-card">
       <div class="info-card-icon">🔍</div>
@@ -834,7 +834,7 @@
       <p>All processing happens in your browser. No files or hashes are transmitted to any server.</p>
     </div>
   </div>
-
+ 
   <div class="tabs">
     <button class="tab-btn active" data-tab="identify" onclick="switchTab('identify', this)">
       🔍 Identify Hash
@@ -846,7 +846,7 @@
       ℹ️ Information
     </button>
   </div>
-
+ 
   <!-- IDENTIFY PANEL -->
   <div class="panel active" id="tab-identify">
     <div class="card">
@@ -855,7 +855,7 @@
         <textarea class="hash-input" id="hashInput" placeholder="Paste hash here — e.g. 5d41402abc4b2a76b9719d911017c592" spellcheck="false"></textarea>
         <button class="clear-btn" onclick="clearHash()" title="Clear">✕</button>
       </div>
-
+ 
       <!-- CAPTCHA for identify -->
       <div class="captcha-wrap" id="captchaId">
         <div class="captcha-label">⚙ Verification Required</div>
@@ -867,12 +867,12 @@
           <span class="captcha-status" id="captchaStatusId"></span>
         </div>
       </div>
-
+ 
       <button class="identify-btn" onclick="identifyHash()">
         <div class="spinner" id="idSpinner"></div>
         🔍 Identify Hash
       </button>
-
+ 
       <div class="error-box" id="idError"></div>
       <div class="result-box" id="idResult">
         <div class="result-header">Detection Result</div>
@@ -882,13 +882,13 @@
         </div>
       </div>
     </div>
-
+ 
     <div class="card">
       <div class="card-title">Supported Hash Types</div>
       <div class="types-grid" id="typesGrid"></div>
     </div>
   </div>
-
+ 
   <!-- GENERATE PANEL -->
   <div class="panel" id="tab-generate">
     <div class="card">
@@ -905,7 +905,7 @@
         <span class="file-size" id="fileSize"></span>
         <button onclick="clearFile()" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:14px;">✕</button>
       </div>
-
+ 
       <!-- CAPTCHA for generate -->
       <div class="captcha-wrap" id="captchaGen">
         <div class="captcha-label">⚙ Verification Required</div>
@@ -917,34 +917,34 @@
           <span class="captcha-status" id="captchaStatusGen"></span>
         </div>
       </div>
-
+ 
       <button class="generate-btn" id="generateBtn" onclick="generateHashes()" disabled>
         <div class="spinner" id="genSpinner"></div>
         ⚡ Generate Hashes
       </button>
-
+ 
       <div class="progress-wrap" id="progressWrap">
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
         <div class="progress-text" id="progressText">Computing…</div>
       </div>
-
+ 
       <div class="error-box" id="genError"></div>
-
+ 
       <div class="hash-results" id="hashResults"></div>
     </div>
   </div>
-
+ 
   <!-- =============================================
        INFORMATION PANEL (new)
        ============================================= -->
   <div class="panel" id="tab-info">
-
+ 
     <!-- Hero banner -->
     <div class="info-page-hero reveal">
       <h2>Understanding Hashing Algorithms</h2>
       <p>Everything you need to know about cryptographic hash functions — what they are, why they matter, and what the world would look like without them.</p>
     </div>
-
+ 
     <!-- Stats row -->
     <div class="info-stats reveal" style="margin-bottom:20px;">
       <div class="stat-chip">
@@ -964,7 +964,7 @@
         <span class="stat-label">Cannot be reversed</span>
       </div>
     </div>
-
+ 
     <!-- Section 1: What are hashing algorithms? -->
     <div class="info-section reveal">
       <div class="info-section-header">
@@ -988,7 +988,7 @@
         "Even a single character change in the input produces a completely different hash output — this is known as the <strong>avalanche effect</strong>."
       </div>
     </div>
-
+ 
     <!-- Section 2: Why are they important? -->
     <div class="info-section reveal">
       <div class="info-section-header">
@@ -1011,7 +1011,7 @@
       <p class="info-section-body" style="margin-top:14px;">
         Hashing is a foundational building block in many modern security technologies, including <strong>digital signatures</strong> and <strong>blockchain systems</strong>, making it an indispensable component of cybersecurity and data protection.
       </p>
-
+ 
       <!-- Use-case chips -->
       <div class="info-stats reveal-stagger" style="margin-top:24px;">
         <div class="stat-chip">
@@ -1032,7 +1032,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- Section 3: What would happen without them? -->
     <div class="info-section reveal">
       <div class="info-section-header">
@@ -1053,7 +1053,7 @@
         "Without hashing, a single database breach could instantly expose every user's password in plain text — affecting potentially millions of accounts simultaneously."
       </div>
     </div>
-
+ 
     <!-- About this tool -->
     <div class="about-tool-box reveal">
       <div class="about-tool-box-icon">🛠️</div>
@@ -1068,16 +1068,16 @@
         <p style="margin-top:10px;">All computations run entirely in your browser using the <strong>Web Crypto API</strong> and a pure-JS MD5 implementation. Nothing ever leaves your device.</p>
       </div>
     </div>
-
+ 
   </div>
   <!-- end tab-info -->
-
+ 
 </main>
-
+ 
 <footer>
   HashLens — All computations are performed client-side. No data leaves your browser. · For educational &amp; forensic use.
 </footer>
-
+ 
 <script>
 // ---- Hash type database ----
 const HASH_TYPES = [
@@ -1106,7 +1106,7 @@ const HASH_TYPES = [
   { name: 'bcrypt',       bits: null, len: null, regex: /^\$2[ayb]\$[0-9]{2}\$[./A-Za-z0-9]{53}$/ },
   { name: 'MD4',          bits: 128, len: 32,   regex: /^[a-f0-9]{32}$/i },
 ];
-
+ 
 const DISPLAY_TYPES = [
   { name: 'MD5',     bits: '128-bit' },
   { name: 'SHA-1',   bits: '160-bit' },
@@ -1121,7 +1121,7 @@ const DISPLAY_TYPES = [
   { name: 'Tiger',   bits: '192-bit' },
   { name: 'SHA3-*',  bits: '224–512-bit' },
 ];
-
+ 
 // Render types grid
 const grid = document.getElementById('typesGrid');
 DISPLAY_TYPES.forEach(t => {
@@ -1130,36 +1130,36 @@ DISPLAY_TYPES.forEach(t => {
   el.innerHTML = `<div class="name">${t.name}</div><div class="bits">${t.bits}</div>`;
   grid.appendChild(el);
 });
-
+ 
 // ---- CAPTCHA ----
 // simple math challenge — nothing fancy, just stops accidental misuse
 const captchas = {
   id:  { a: 0, b: 0, ok: false },
   gen: { a: 0, b: 0, ok: false },
 };
-
+ 
 function newCaptcha(type) {
   const a = Math.floor(Math.random() * 20) + 1;
   const b = Math.floor(Math.random() * 20) + 1;
-
+ 
   captchas[type].a = a;
   captchas[type].b = b;
   captchas[type].ok = false;
-
+ 
   const suffix = type === 'id' ? 'Id' : 'Gen';
   document.getElementById('captchaSum' + suffix).textContent = `${a} + ${b}`;
   document.getElementById('captchaAnswer' + suffix).value = '';
   document.getElementById('captchaStatus' + suffix).textContent = '';
-
+ 
   if (type === 'gen') updateGenerateBtn();
 }
-
+ 
 function checkCaptcha(type) {
   const suffix = type === 'id' ? 'Id' : 'Gen';
   const answer = parseInt(document.getElementById('captchaAnswer' + suffix).value, 10);
   const expected = captchas[type].a + captchas[type].b;
   const statusEl = document.getElementById('captchaStatus' + suffix);
-
+ 
   if (answer === expected) {
     captchas[type].ok = true;
     statusEl.textContent = '✓ Verified';
@@ -1169,29 +1169,29 @@ function checkCaptcha(type) {
     statusEl.textContent = answer ? '✗ Incorrect' : '';
     statusEl.className = 'captcha-status err';
   }
-
+ 
   if (type === 'gen') updateGenerateBtn();
 }
-
+ 
 function updateGenerateBtn() {
   const btn = document.getElementById('generateBtn');
   btn.disabled = !(captchas.gen.ok && selectedFile !== null);
 }
-
+ 
 // kick off a challenge for each panel on load
 newCaptcha('id');
 newCaptcha('gen');
-
+ 
 // ---- Theme toggle ----
 const root = document.documentElement;
-
+ 
 function applyTheme(dark) {
   root.setAttribute('data-theme', dark ? 'dark' : 'light');
   document.getElementById('themeIcon').textContent = dark ? '☀️' : '🌙';
   document.getElementById('themeToggle').lastChild.textContent = dark ? ' Light Mode' : ' Dark Mode';
   try { localStorage.setItem('hashlens-theme', dark ? 'dark' : 'light'); } catch(e) {}
 }
-
+ 
 // restore saved preference on load
 (function() {
   let saved = null;
@@ -1204,53 +1204,53 @@ function applyTheme(dark) {
     applyTheme(prefersDark);
   }
 })();
-
+ 
 document.getElementById('themeToggle').addEventListener('click', () => {
   const currentlyDark = root.getAttribute('data-theme') === 'dark';
   applyTheme(!currentlyDark);
 });
-
+ 
 // ---- Tabs ----
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
-
+ 
   // Trigger scroll-reveal check when switching to the info tab
   if (tab === 'info') {
     setTimeout(checkReveal, 50);
   }
 }
-
+ 
 // ---- Hash Identification ----
 function showError(id, msg) {
   const el = document.getElementById(id);
   el.textContent = '⚠ ' + msg;
   el.classList.add('visible');
 }
-
+ 
 function hideError(id) {
   document.getElementById(id).classList.remove('visible');
 }
-
+ 
 function clearHash() {
   document.getElementById('hashInput').value = '';
   document.getElementById('idResult').classList.remove('visible');
   hideError('idError');
 }
-
+ 
 function identifyHash() {
   hideError('idError');
   document.getElementById('idResult').classList.remove('visible');
-
+ 
   if (!captchas.id.ok) {
     showError('idError', 'Please complete the verification challenge first.');
     return;
   }
-
+ 
   const raw = document.getElementById('hashInput').value.trim();
-
+ 
   if (!raw) {
     showError('idError', 'Please enter a hash string to identify.');
     return;
@@ -1259,25 +1259,25 @@ function identifyHash() {
     showError('idError', 'Input too short to be a valid hash.');
     return;
   }
-
+ 
   const spin = document.getElementById('idSpinner');
   spin.classList.add('visible');
-
+ 
   // small delay so the spinner actually shows before we block the thread
   setTimeout(() => {
     spin.classList.remove('visible');
-
+ 
     const matches = HASH_TYPES.filter(t => t.regex.test(raw));
-
+ 
     if (matches.length === 0) {
       showError('idError', `Unknown hash format. Length: ${raw.length} chars (${raw.length * 4} bits). Not matching any known pattern.`);
       return;
     }
-
+ 
     // prefer entries where the length matches exactly
     const exact = matches.filter(t => t.len === raw.length || t.len === null);
     const display = exact.length ? exact : matches;
-
+ 
     document.getElementById('hashTypeDisplay').textContent = display.map(t => t.name).join(' / ');
     document.getElementById('hashMeta').innerHTML = `
       <span>📏 ${raw.length} hex chars</span>
@@ -1286,17 +1286,17 @@ function identifyHash() {
       ${display.length > 1 ? `<span>⚠ ${display.length} possible algorithms</span>` : ''}
     `;
     document.getElementById('idResult').classList.add('visible');
-
+ 
     // reset the captcha so each identification requires a fresh solve
     newCaptcha('id');
   }, 400);
 }
-
+ 
 // ---- File Hashing ----
 let selectedFile = null;
-
+ 
 const dropzone = document.getElementById('dropzone');
-
+ 
 dropzone.addEventListener('dragover', e => {
   e.preventDefault();
   dropzone.classList.add('dragover');
@@ -1309,13 +1309,13 @@ dropzone.addEventListener('drop', e => {
   dropzone.classList.remove('dragover');
   if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
 });
-
+ 
 function formatSize(bytes) {
   if (bytes < 1024) return bytes + ' B';
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
 }
-
+ 
 function handleFile(file) {
   selectedFile = file;
   document.getElementById('fileName').textContent = file.name;
@@ -1325,7 +1325,7 @@ function handleFile(file) {
   hideError('genError');
   updateGenerateBtn();
 }
-
+ 
 function clearFile() {
   selectedFile = null;
   document.getElementById('fileInput').value = '';
@@ -1333,14 +1333,14 @@ function clearFile() {
   document.getElementById('hashResults').classList.remove('visible');
   updateGenerateBtn();
 }
-
+ 
 // convert an ArrayBuffer to a lowercase hex string
 function bufferToHex(buf) {
   return Array.from(new Uint8Array(buf))
     .map(b => b.toString(16).padStart(2, '0'))
     .join('');
 }
-
+ 
 async function generateHashes() {
   if (!captchas.gen.ok) {
     showError('genError', 'Please complete the verification challenge first.');
@@ -1350,38 +1350,38 @@ async function generateHashes() {
     showError('genError', 'Please select a file first.');
     return;
   }
-
+ 
   hideError('genError');
-
+ 
   const btn      = document.getElementById('generateBtn');
   const spin     = document.getElementById('genSpinner');
   const progress = document.getElementById('progressWrap');
   const fill     = document.getElementById('progressFill');
   const ptext    = document.getElementById('progressText');
   const results  = document.getElementById('hashResults');
-
+ 
   btn.disabled = true;
   spin.classList.add('visible');
   progress.classList.add('visible');
   results.classList.remove('visible');
-
+ 
   const buffer = await selectedFile.arrayBuffer();
-
+ 
   // SubtleCrypto doesn't support MD5, so we compute that one manually
   const algos = [
     { id: 'SHA-1',   webApi: 'SHA-1' },
     { id: 'SHA-256', webApi: 'SHA-256' },
     { id: 'SHA-512', webApi: 'SHA-512' },
   ];
-
+ 
   const hashes = {};
-
+ 
   ptext.textContent = 'Computing MD5…';
   fill.style.width = '10%';
   await new Promise(r => setTimeout(r, 10));
   hashes['MD5'] = md5(buffer);
   fill.style.width = '30%';
-
+ 
   let done = 0;
   for (const algo of algos) {
     ptext.textContent = `Computing ${algo.id}…`;
@@ -1391,10 +1391,10 @@ async function generateHashes() {
     done++;
     fill.style.width = (30 + done * 20) + '%';
   }
-
+ 
   fill.style.width = '100%';
   ptext.textContent = 'Done ✓';
-
+ 
   results.innerHTML = Object.entries(hashes).map(([alg, val]) => `
     <div class="hash-row">
       <span class="hash-alg">${alg}</span>
@@ -1403,17 +1403,17 @@ async function generateHashes() {
     </div>
   `).join('');
   results.classList.add('visible');
-
+ 
   setTimeout(() => {
     progress.classList.remove('visible');
     spin.classList.remove('visible');
     btn.disabled = false;
   }, 800);
-
+ 
   // reset so they have to re-verify for the next file
   newCaptcha('gen');
 }
-
+ 
 function copyHash(btn, val) {
   navigator.clipboard.writeText(val).then(() => {
     btn.textContent = 'Copied!';
@@ -1424,7 +1424,7 @@ function copyHash(btn, val) {
     }, 2000);
   });
 }
-
+ 
 // ---- Scroll-reveal (IntersectionObserver) for the Information tab ----
 function checkReveal() {
   const observer = new IntersectionObserver((entries) => {
@@ -1438,13 +1438,13 @@ function checkReveal() {
     threshold: 0.12,   // trigger when 12% of the element is visible
     rootMargin: '0px 0px -40px 0px'
   });
-
+ 
   // Observe every .reveal and .reveal-stagger inside the info panel
   document.querySelectorAll('#tab-info .reveal, #tab-info .reveal-stagger').forEach(el => {
     observer.observe(el);
   });
 }
-
+ 
 // Also run on normal scroll in case items are already partly in view
 window.addEventListener('scroll', () => {
   document.querySelectorAll('#tab-info .reveal:not(.in-view), #tab-info .reveal-stagger:not(.in-view)').forEach(el => {
@@ -1454,14 +1454,14 @@ window.addEventListener('scroll', () => {
     }
   });
 }, { passive: true });
-
+ 
 // ---- MD5 Implementation ----
 // Pure JS port of the standard MD5 algorithm.
 // We need this because the Web Crypto API (SubtleCrypto) dropped MD5 support —
 // it's considered cryptographically broken, but we still need it for file integrity checks.
 function md5(buffer) {
   const bytes = new Uint8Array(buffer);
-
+ 
   function safeAdd(x, y) {
     const lsw = (x & 0xFFFF) + (y & 0xFFFF);
     return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xFFFF);
@@ -1472,32 +1472,32 @@ function md5(buffer) {
   function md5gg(a, b, c, d, x, s, t) { return md5cmn((b & d) | (c & ~d), a, b, x, s, t); }
   function md5hh(a, b, c, d, x, s, t) { return md5cmn(b ^ c ^ d, a, b, x, s, t); }
   function md5ii(a, b, c, d, x, s, t) { return md5cmn(c ^ (b | ~d), a, b, x, s, t); }
-
+ 
   const n = bytes.length;
   const nBits = n * 8;
-
+ 
   // pad the message to a multiple of 512 bits
   const nBytes = Math.ceil((n + 9) / 64) * 64;
   const padded = new Uint8Array(nBytes);
   padded.set(bytes);
   padded[n] = 0x80;
-
+ 
   const view = new DataView(padded.buffer);
   view.setUint32(nBytes - 8, nBits & 0xFFFFFFFF, true);
   view.setUint32(nBytes - 4, Math.floor(nBits / 0x100000000), true);
-
+ 
   // initial hash values
   let a = 0x67452301;
   let b = 0xEFCDAB89;
   let c = 0x98BADCFE;
   let d = 0x10325476;
-
+ 
   for (let i = 0; i < nBytes / 4; i += 16) {
     const M = [];
     for (let j = 0; j < 16; j++) M[j] = view.getInt32((i + j) * 4, true);
-
+ 
     const [aa, bb, cc, dd] = [a, b, c, d];
-
+ 
     // Round 1
     a=md5ff(a,b,c,d,M[0], 7,-680876936);  d=md5ff(d,a,b,c,M[1], 12,-389564586);
     c=md5ff(c,d,a,b,M[2], 17,606105819);  b=md5ff(b,c,d,a,M[3], 22,-1044525330);
@@ -1507,7 +1507,7 @@ function md5(buffer) {
     c=md5ff(c,d,a,b,M[10],17,-42063);      b=md5ff(b,c,d,a,M[11],22,-1990404162);
     a=md5ff(a,b,c,d,M[12],7,1804603682);  d=md5ff(d,a,b,c,M[13],12,-40341101);
     c=md5ff(c,d,a,b,M[14],17,-1502002290); b=md5ff(b,c,d,a,M[15],22,1236535329);
-
+ 
     // Round 2
     a=md5gg(a,b,c,d,M[1], 5,-165796510);  d=md5gg(d,a,b,c,M[6], 9,-1069501632);
     c=md5gg(c,d,a,b,M[11],14,643717713);  b=md5gg(b,c,d,a,M[0], 20,-373897302);
@@ -1517,7 +1517,7 @@ function md5(buffer) {
     c=md5gg(c,d,a,b,M[3], 14,-187363961); b=md5gg(b,c,d,a,M[8], 20,1163531501);
     a=md5gg(a,b,c,d,M[13],5,-1444681467); d=md5gg(d,a,b,c,M[2], 9,-51403784);
     c=md5gg(c,d,a,b,M[7], 14,1735328473); b=md5gg(b,c,d,a,M[12],20,-1926607734);
-
+ 
     // Round 3
     a=md5hh(a,b,c,d,M[5], 4,-378558);     d=md5hh(d,a,b,c,M[8], 11,-2022574463);
     c=md5hh(c,d,a,b,M[11],16,1839030562); b=md5hh(b,c,d,a,M[14],23,-35309556);
@@ -1527,7 +1527,7 @@ function md5(buffer) {
     c=md5hh(c,d,a,b,M[3], 16,-722521979); b=md5hh(b,c,d,a,M[6], 23,76029189);
     a=md5hh(a,b,c,d,M[9], 4,-640364487);  d=md5hh(d,a,b,c,M[12],11,-421815835);
     c=md5hh(c,d,a,b,M[15],16,530742520);  b=md5hh(b,c,d,a,M[2], 23,-995338651);
-
+ 
     // Round 4
     a=md5ii(a,b,c,d,M[0], 6,-198630844);  d=md5ii(d,a,b,c,M[7], 10,1126891415);
     c=md5ii(c,d,a,b,M[14],15,-1416354905); b=md5ii(b,c,d,a,M[5], 21,-57434055);
@@ -1537,13 +1537,13 @@ function md5(buffer) {
     c=md5ii(c,d,a,b,M[6], 15,-1560198380); b=md5ii(b,c,d,a,M[13],21,1309151649);
     a=md5ii(a,b,c,d,M[4], 6,-145523070);  d=md5ii(d,a,b,c,M[11],10,-1120210379);
     c=md5ii(c,d,a,b,M[2], 15,718787259);  b=md5ii(b,c,d,a,M[9], 21,-343485551);
-
+ 
     a = safeAdd(a, aa);
     b = safeAdd(b, bb);
     c = safeAdd(c, cc);
     d = safeAdd(d, dd);
   }
-
+ 
   const out = new DataView(new ArrayBuffer(16));
   out.setInt32(0,  a, true);
   out.setInt32(4,  b, true);
