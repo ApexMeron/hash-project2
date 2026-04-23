@@ -596,33 +596,64 @@
   }
  
   /* =============================================
-     INFORMATION PAGE STYLES (new — added below)
+     INFORMATION PAGE STYLES
      ============================================= */
  
-  /* Scroll-reveal base state: hidden and shifted down */
+  /* ---- Apple-style scroll reveal ---- */
+  /* Hidden state: blurred, shifted down, slightly scaled */
   .reveal {
     opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(72px) scale(0.96);
+    filter: blur(8px);
+    transition:
+      opacity  1.1s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+      filter   0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform, filter;
   }
-  /* Once the IntersectionObserver fires, this class makes it visible */
   .reveal.in-view {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
   }
  
-  /* Stagger children inside a reveal container */
+  /* Stagger wrapper — children animate in sequence */
   .reveal-stagger > * {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(48px) scale(0.97);
+    filter: blur(5px);
+    transition:
+      opacity  0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      filter   0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform, filter;
   }
-  .reveal-stagger.in-view > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay: 0s; }
-  .reveal-stagger.in-view > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay: 0.1s; }
-  .reveal-stagger.in-view > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay: 0.2s; }
-  .reveal-stagger.in-view > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay: 0.3s; }
+  .reveal-stagger.in-view > *:nth-child(1) { opacity:1; transform:translateY(0) scale(1); filter:blur(0); transition-delay:0s;    }
+  .reveal-stagger.in-view > *:nth-child(2) { opacity:1; transform:translateY(0) scale(1); filter:blur(0); transition-delay:0.12s; }
+  .reveal-stagger.in-view > *:nth-child(3) { opacity:1; transform:translateY(0) scale(1); filter:blur(0); transition-delay:0.24s; }
+  .reveal-stagger.in-view > *:nth-child(4) { opacity:1; transform:translateY(0) scale(1); filter:blur(0); transition-delay:0.36s; }
+ 
+  /* Inside info-sections: header block and each body paragraph animate separately */
+  .info-section .info-section-header,
+  .info-section .info-section-body,
+  .info-section .info-pullquote,
+  .info-section .info-stats {
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(4px);
+    transition:
+      opacity  0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      filter   0.7s  cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform, filter;
+  }
+  .info-section.in-view .info-section-header                         { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0s;    }
+  .info-section.in-view .info-section-body:nth-of-type(1)            { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.15s; }
+  .info-section.in-view .info-section-body:nth-of-type(2)            { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.28s; }
+  .info-section.in-view .info-section-body:nth-of-type(3)            { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.4s;  }
+  .info-section.in-view .info-section-body:nth-of-type(4)            { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.5s;  }
+  .info-section.in-view .info-pullquote                              { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.55s; }
+  .info-section.in-view .info-stats                                  { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.5s;  }
  
   /* Info page hero banner */
   .info-page-hero {
@@ -812,6 +843,8 @@
 </header>
  
 <main>
+<div class="page active" id="page-tool">
+ 
   <div class="hero">
     <h1>Identify &amp; Generate<br><em>Hash Signatures</em></h1>
     <p>A forensic-grade tool for cybersecurity analysts to identify hash types and compute cryptographic checksums from files.</p>
@@ -841,9 +874,6 @@
     </button>
     <button class="tab-btn" data-tab="generate" onclick="switchTab('generate', this)">
       ⚡ Generate Hashes
-    </button>
-    <button class="tab-btn" data-tab="info" onclick="switchTab('info', this)">
-      ℹ️ Information
     </button>
   </div>
  
@@ -934,10 +964,12 @@
     </div>
   </div>
  
-  <!-- =============================================
-       INFORMATION PANEL (new)
-       ============================================= -->
-  <div class="panel" id="tab-info">
+</div><!-- end page-tool -->
+ 
+<!-- =============================================
+     INFORMATION PAGE
+     ============================================= -->
+<div class="page" id="page-info">
  
     <!-- Hero banner -->
     <div class="info-page-hero reveal">
@@ -1069,8 +1101,7 @@
       </div>
     </div>
  
-  </div>
-  <!-- end tab-info -->
+</div><!-- end page-info -->
  
 </main>
  
@@ -1210,17 +1241,68 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   applyTheme(!currentlyDark);
 });
  
+// ---- Page toggle (tool ↔ info) ----
+let revealObserver = null;
+ 
+function setupRevealObserver() {
+  if (revealObserver) revealObserver.disconnect();
+ 
+  revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.08,
+    // Only trigger once the element is 80px past the bottom of the viewport
+    rootMargin: '0px 0px -80px 0px'
+  });
+ 
+  document.querySelectorAll('#page-info .reveal, #page-info .reveal-stagger, #page-info .info-section').forEach(el => {
+    revealObserver.observe(el);
+  });
+}
+ 
+function toggleInfoPage() {
+  const toolPage = document.getElementById('page-tool');
+  const infoPage = document.getElementById('page-info');
+  const btn      = document.getElementById('infoNavBtn');
+  const onInfo   = infoPage.classList.contains('active');
+ 
+  if (onInfo) {
+    if (revealObserver) revealObserver.disconnect();
+    infoPage.classList.remove('active');
+    toolPage.classList.add('active');
+    btn.textContent = 'ℹ️ Information page';
+    btn.classList.remove('active');
+  } else {
+    toolPage.classList.remove('active');
+    infoPage.classList.add('active');
+    btn.textContent = '← Back to tool';
+    btn.classList.add('active');
+ 
+    // Reset all reveals back to hidden
+    infoPage.querySelectorAll('.reveal, .reveal-stagger, .info-section').forEach(el => {
+      el.classList.remove('in-view');
+    });
+ 
+    window.scrollTo({ top: 0, behavior: 'instant' });
+ 
+    // Start observer after the DOM has painted
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setupRevealObserver());
+    });
+  }
+}
+ 
 // ---- Tabs ----
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
- 
-  // Trigger scroll-reveal check when switching to the info tab
-  if (tab === 'info') {
-    setTimeout(checkReveal, 50);
-  }
 }
  
 // ---- Hash Identification ----
@@ -1424,36 +1506,6 @@ function copyHash(btn, val) {
     }, 2000);
   });
 }
- 
-// ---- Scroll-reveal (IntersectionObserver) for the Information tab ----
-function checkReveal() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        observer.unobserve(entry.target); // fire once only
-      }
-    });
-  }, {
-    threshold: 0.12,   // trigger when 12% of the element is visible
-    rootMargin: '0px 0px -40px 0px'
-  });
- 
-  // Observe every .reveal and .reveal-stagger inside the info panel
-  document.querySelectorAll('#tab-info .reveal, #tab-info .reveal-stagger').forEach(el => {
-    observer.observe(el);
-  });
-}
- 
-// Also run on normal scroll in case items are already partly in view
-window.addEventListener('scroll', () => {
-  document.querySelectorAll('#tab-info .reveal:not(.in-view), #tab-info .reveal-stagger:not(.in-view)').forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 40) {
-      el.classList.add('in-view');
-    }
-  });
-}, { passive: true });
  
 // ---- MD5 Implementation ----
 // Pure JS port of the standard MD5 algorithm.
