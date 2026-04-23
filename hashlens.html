@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HashLens — Hash Identifier & Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1eb;
+    --surface: #ffffff;
+    --surface2: #f9f7f3;
+    --border: #e0d9ce;
+    --text: #1a1714;
+    --text2: #6b5f52;
+    --accent: #c84b31;
+    --accent2: #2563eb;
+    --accent-soft: #fdecea;
+    --green: #16a34a;
+    --green-soft: #dcfce7;
+    --shadow: rgba(0,0,0,0.08);
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+  [data-theme="dark"] {
+    --bg: #111010;
+    --surface: #1c1b1a;
+    --surface2: #252422;
+    --border: #333130;
+    --text: #f0ece4;
+    --text2: #9a8f82;
+    --accent: #e06448;
+    --accent2: #60a5fa;
+    --accent-soft: #2a1a17;
+    --green: #4ade80;
+    --green-soft: #142a1e;
+    --shadow: rgba(0,0,0,0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+    line-height: 1.5;
+  }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-icon svg { width: 20px; height: 20px; fill: white; }
+  .logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .logo-text span { color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .theme-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text2);
+    font-family: var(--sans);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .theme-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* Information page nav button in header */
+  .info-nav-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    font-family: var(--sans);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.2px;
+  }
+  .info-nav-btn:hover { background: #b33d26; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(200,75,49,0.3); }
+  .info-nav-btn.active { background: #1a1714; }
+  [data-theme="dark"] .info-nav-btn.active { background: #f0ece4; color: #1a1714; }
+
+  /* Page views */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Main */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeUp 0.5s ease;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero p {
+    color: var(--text2);
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto;
+    font-weight: 400;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    background: var(--surface2);
+    animation: fadeUp 0.5s 0.1s ease both;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text2);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .tab-btn.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .tab-btn:hover:not(.active) { color: var(--text); background: var(--surface); opacity: 0.7; }
+
+  /* Panel */
+  .panel {
+    display: none;
+    animation: fadeUp 0.3s ease;
+  }
+  .panel.active { display: block; }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text2);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* Hash input */
+  .hash-input-wrap { position: relative; }
+  .hash-input {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 14px;
+    padding: 14px 48px 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface2);
+    color: var(--text);
+    outline: none;
+    transition: border 0.2s;
+    resize: none;
+    height: 80px;
+  }
+  .hash-input:focus { border-color: var(--accent); }
+  .hash-input::placeholder { color: var(--text2); opacity: 0.7; }
+  .clear-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: var(--text2);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.2s;
+  }
+  .clear-btn:hover { color: var(--accent); }
+
+  .identify-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .identify-btn:hover { background: #b33d26; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,75,49,0.3); }
+  .identify-btn:active { transform: none; }
+
+  /* Result */
+  .result-box {
+    margin-top: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    display: none;
+  }
+  .result-box.visible { display: block; animation: fadeUp 0.3s ease; }
+  .result-header {
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+  }
+  .result-body { padding: 16px; }
+  .hash-type-display {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+  .hash-meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .hash-meta span { display: flex; align-items: center; gap: 4px; }
+  .error-box {
+    padding: 12px 16px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(200,75,49,0.2);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 13px;
+    margin-top: 12px;
+    display: none;
+    font-family: var(--mono);
+  }
+  .error-box.visible { display: block; }
+
+  /* Known types grid */
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .type-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .type-chip .name { font-weight: 600; color: var(--text); }
+  .type-chip .bits { color: var(--text2); font-size: 10px; margin-top: 2px; }
+
+  /* File upload */
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .dropzone-icon { font-size: 36px; margin-bottom: 12px; }
+  .dropzone-text { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .dropzone-sub { font-size: 13px; color: var(--text2); }
+
+  .file-info {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--green-soft);
+    border: 1px solid rgba(22,163,74,0.2);
+    border-radius: 8px;
+    margin-top: 12px;
+    font-size: 13px;
+  }
+  .file-info.visible { display: flex; }
+  .file-name { font-family: var(--mono); font-weight: 600; color: var(--green); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-size { color: var(--text2); font-family: var(--mono); font-size: 12px; }
+
+  .generate-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 13px;
+    background: var(--accent2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .generate-btn:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+  .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .hash-results {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .hash-results.visible { display: flex; animation: fadeUp 0.3s ease; }
+  .hash-row {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hash-alg {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    min-width: 60px;
+    border-right: 1px solid var(--border);
+    padding-right: 12px;
+  }
+  .hash-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    color: var(--text2);
+    font-family: var(--mono);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .copy-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+  .copy-btn.copied { border-color: var(--green); color: var(--green); }
+
+  /* CAPTCHA */
+  .captcha-wrap {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .captcha-label { font-size: 12px; color: var(--text2); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .captcha-challenge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .captcha-sum {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 600;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 6px;
+    letter-spacing: 2px;
+    min-width: 120px;
+    text-align: center;
+    user-select: none;
+  }
+  .captcha-input {
+    font-family: var(--mono);
+    font-size: 16px;
+    width: 80px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    text-align: center;
+    transition: border 0.2s;
+  }
+  .captcha-input:focus { border-color: var(--accent2); }
+  .captcha-refresh {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text2);
+    font-size: 18px;
+    transition: transform 0.3s;
+    padding: 4px;
+  }
+  .captcha-refresh:hover { transform: rotate(180deg); color: var(--accent); }
+  .captcha-status { font-size: 12px; font-family: var(--mono); }
+  .captcha-status.ok { color: var(--green); }
+  .captcha-status.err { color: var(--accent); }
+
+  /* Progress */
+  .progress-wrap { margin-top: 12px; display: none; }
+  .progress-wrap.visible { display: block; }
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent2);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.1s;
+  }
+  .progress-text { font-family: var(--mono); font-size: 11px; color: var(--text2); }
+
+  /* Info section */
+  .info-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s 0.2s ease both;
+  }
+  .info-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .info-card-icon { font-size: 24px; margin-bottom: 10px; }
+  .info-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .info-card p { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: none;
+  }
+  .spinner.visible { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: var(--text2);
+    font-family: var(--mono);
+  }
+
+  @media (max-width: 600px) {
+    .hash-row { flex-wrap: wrap; }
+    .hash-val { min-width: 100%; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
+  }
+
+  /* =============================================
+     INFORMATION PAGE STYLES (new — added below)
+     ============================================= */
+
+  /* Scroll-reveal base state: hidden and shifted down */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Once the IntersectionObserver fires, this class makes it visible */
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger children inside a reveal container */
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-stagger.in-view > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay: 0s; }
+  .reveal-stagger.in-view > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay: 0.1s; }
+  .reveal-stagger.in-view > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay: 0.2s; }
+  .reveal-stagger.in-view > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay: 0.3s; }
+
+  /* Info page hero banner */
+  .info-page-hero {
+    background: linear-gradient(135deg, var(--accent) 0%, #a0341f 100%);
+    border-radius: 14px;
+    padding: 48px 36px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .info-page-hero::before {
+    content: '#';
+    position: absolute;
+    right: 24px;
+    top: -10px;
+    font-family: var(--mono);
+    font-size: 180px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .info-page-hero h2 {
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .info-page-hero p {
+    color: rgba(255,255,255,0.75);
+    font-size: 14px;
+    max-width: 520px;
+  }
+
+  /* Section blocks */
+  .info-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    margin-bottom: 20px;
+  }
+
+  .info-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .info-section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .icon-blue  { background: #eff6ff; }
+  .icon-green { background: var(--green-soft); }
+  .icon-red   { background: var(--accent-soft); }
+  [data-theme="dark"] .icon-blue  { background: #1e3a5f; }
+  [data-theme="dark"] .icon-green { background: #142a1e; }
+  [data-theme="dark"] .icon-red   { background: #2a1a17; }
+
+  .info-section-title {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .info-section-subtitle {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .info-section-body {
+    font-size: 14.5px;
+    color: var(--text2);
+    line-height: 1.75;
+  }
+  .info-section-body strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* Pull-quote / highlight stripe */
+  .info-pullquote {
+    border-left: 3px solid var(--accent);
+    padding: 12px 18px;
+    background: var(--accent-soft);
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0 0;
+    font-size: 13.5px;
+    color: var(--text);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* Stats row */
+  .info-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .stat-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-chip .stat-val {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .stat-chip .stat-label {
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Divider line between sections */
+  .info-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0 20px;
+    border: none;
+  }
+
+  /* About-this-tool box at the bottom */
+  .about-tool-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .about-tool-box-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .about-tool-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .about-tool-box p  { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .about-tool-box ul {
+    margin-top: 10px;
+    padding-left: 18px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 14l-3-3 1.41-1.41L11 12.17l4.59-4.58L17 9l-6 6z"/></svg>
+      </div>
+      <div class="logo-text">Hash<span>Lens</span></div>
+    </div>
+    <div class="header-right">
+      <span class="badge">Forensic Tool</span>
+      <button class="info-nav-btn" id="infoNavBtn" onclick="toggleInfoPage()">
+        ℹ️ Information page
+      </button>
+      <button class="theme-btn" id="themeToggle">
+        <span id="themeIcon">🌙</span> Dark Mode
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="page active" id="page-tool">
+
+  <div class="hero">
+    <h1>Identify &amp; Generate<br><em>Hash Signatures</em></h1>
+    <p>A forensic-grade tool for cybersecurity analysts to identify hash types and compute cryptographic checksums from files.</p>
+  </div>
+
+  <div class="info-row">
+    <div class="info-card">
+      <div class="info-card-icon">🔍</div>
+      <h3>Hash Identification</h3>
+      <p>Paste any hash string to instantly detect its algorithm based on length, format, and character set.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">📁</div>
+      <h3>File Hashing</h3>
+      <p>Drop any file to generate MD5, SHA-1, SHA-256, and SHA-512 checksums for integrity verification.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">🔒</div>
+      <h3>Client-Side Only</h3>
+      <p>All processing happens in your browser. No files or hashes are transmitted to any server.</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="identify" onclick="switchTab('identify', this)">
+      🔍 Identify Hash
+    </button>
+    <button class="tab-btn" data-tab="generate" onclick="switchTab('generate', this)">
+      ⚡ Generate Hashes
+    </button>
+  </div>
+
+  <!-- IDENTIFY PANEL -->
+  <div class="panel active" id="tab-identify">
+    <div class="card">
+      <div class="card-title">Hash String Input</div>
+      <div class="hash-input-wrap">
+        <textarea class="hash-input" id="hashInput" placeholder="Paste hash here — e.g. 5d41402abc4b2a76b9719d911017c592" spellcheck="false"></textarea>
+        <button class="clear-btn" onclick="clearHash()" title="Clear">✕</button>
+      </div>
+
+      <!-- CAPTCHA for identify -->
+      <div class="captcha-wrap" id="captchaId">
+        <div class="captcha-label">⚙ Verification Required</div>
+        <div class="captcha-challenge">
+          <div class="captcha-sum" id="captchaSumId">—</div>
+          <span style="font-size:16px;color:var(--text2)">=</span>
+          <input class="captcha-input" type="number" id="captchaAnswerId" placeholder="?" onInput="checkCaptcha('id')">
+          <button class="captcha-refresh" onclick="newCaptcha('id')" title="New challenge">↻</button>
+          <span class="captcha-status" id="captchaStatusId"></span>
+        </div>
+      </div>
+
+      <button class="identify-btn" onclick="identifyHash()">
+        <div class="spinner" id="idSpinner"></div>
+        🔍 Identify Hash
+      </button>
+
+      <div class="error-box" id="idError"></div>
+      <div class="result-box" id="idResult">
+        <div class="result-header">Detection Result</div>
+        <div class="result-body">
+          <div class="hash-type-display" id="hashTypeDisplay"></div>
+          <div class="hash-meta" id="hashMeta"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Supported Hash Types</div>
+      <div class="types-grid" id="typesGrid"></div>
+    </div>
+  </div>
+
+  <!-- GENERATE PANEL -->
+  <div class="panel" id="tab-generate">
+    <div class="card">
+      <div class="card-title">File Upload</div>
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" onchange="handleFile(this.files[0])">
+        <div class="dropzone-icon">📂</div>
+        <div class="dropzone-text">Drop file here or click to browse</div>
+        <div class="dropzone-sub">Any file type · Processed entirely in your browser</div>
+      </div>
+      <div class="file-info" id="fileInfo">
+        <span>📄</span>
+        <span class="file-name" id="fileName"></span>
+        <span class="file-size" id="fileSize"></span>
+        <button onclick="clearFile()" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:14px;">✕</button>
+      </div>
+
+      <!-- CAPTCHA for generate -->
+      <div class="captcha-wrap" id="captchaGen">
+        <div class="captcha-label">⚙ Verification Required</div>
+        <div class="captcha-challenge">
+          <div class="captcha-sum" id="captchaSumGen">—</div>
+          <span style="font-size:16px;color:var(--text2)">=</span>
+          <input class="captcha-input" type="number" id="captchaAnswerGen" placeholder="?" onInput="checkCaptcha('gen')">
+          <button class="captcha-refresh" onclick="newCaptcha('gen')" title="New challenge">↻</button>
+          <span class="captcha-status" id="captchaStatusGen"></span>
+        </div>
+      </div>
+
+      <button class="generate-btn" id="generateBtn" onclick="generateHashes()" disabled>
+        <div class="spinner" id="genSpinner"></div>
+        ⚡ Generate Hashes
+      </button>
+
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Computing…</div>
+      </div>
+
+      <div class="error-box" id="genError"></div>
+
+      <div class="hash-results" id="hashResults"></div>
+    </div>
+  </div>
+
+</div><!-- end page-tool -->
+
+<!-- =============================================
+     INFORMATION PAGE
+     ============================================= -->
+<div class="page" id="page-info">
+
+    <!-- Hero banner -->
+    <div class="info-page-hero reveal">
+      <h2>Understanding Hashing Algorithms</h2>
+      <p>Everything you need to know about cryptographic hash functions — what they are, why they matter, and what the world would look like without them.</p>
+    </div>
+
+    <!-- Stats row -->
+    <div class="info-stats reveal" style="margin-bottom:20px;">
+      <div class="stat-chip">
+        <span class="stat-val">MD5</span>
+        <span class="stat-label">128-bit output</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val">SHA-256</span>
+        <span class="stat-label">256-bit output</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val">2<sup style="font-size:14px">256</sup></span>
+        <span class="stat-label">SHA-256 combinations</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val">1-way</span>
+        <span class="stat-label">Cannot be reversed</span>
+      </div>
+    </div>
+
+    <!-- Section 1: What are hashing algorithms? -->
+    <div class="info-section reveal">
+      <div class="info-section-header">
+        <div class="info-section-icon icon-blue">🔢</div>
+        <div>
+          <div class="info-section-title">What are hashing algorithms?</div>
+          <div class="info-section-subtitle">Core concept</div>
+        </div>
+      </div>
+      <hr class="info-divider">
+      <p class="info-section-body">
+        Hashing algorithms are <strong>mathematical functions</strong> that take an input — like a file, password, or message — and convert it into a fixed-length string of characters. This is known as a <strong>hash value</strong> or <strong>digest</strong>. Regardless of the size of the input, the output is always the same length, and even a tiny change in the input will produce a completely different hash.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        Examples of common hashing algorithms include <strong>MD5</strong>, <strong>SHA-1</strong>, and <strong>SHA-256</strong>, each designed to be fast, deterministic, and difficult to reverse. They are used in cybersecurity for tasks such as securely storing passwords, verifying data integrity, and detecting tampering.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        For example, when a password is stored, only its hash is saved rather than the original text, improving security. Similarly, hashes can be used to confirm that a file has not been altered by comparing its current hash to a known original value.
+      </p>
+      <div class="info-pullquote">
+        "Even a single character change in the input produces a completely different hash output — this is known as the <strong>avalanche effect</strong>."
+      </div>
+    </div>
+
+    <!-- Section 2: Why are they important? -->
+    <div class="info-section reveal">
+      <div class="info-section-header">
+        <div class="info-section-icon icon-green">🛡️</div>
+        <div>
+          <div class="info-section-title">Why are they important?</div>
+          <div class="info-section-subtitle">Security & integrity</div>
+        </div>
+      </div>
+      <hr class="info-divider">
+      <p class="info-section-body">
+        Hashing algorithms are important because they play a key role in <strong>protecting sensitive information</strong> and maintaining security in digital systems. By converting data such as passwords into hash values, systems avoid storing the original information in plain text, which reduces the risk of exposure if a database is compromised.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        Even if attackers gain access to hashed data, reversing it back to the original input is extremely difficult, especially when strong algorithms are used.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        They are also essential for <strong>ensuring data integrity and trust</strong>. Hashes allow systems to quickly verify that files, messages, or transactions have not been altered, which is critical in areas like software distribution, digital forensics, and secure communications.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        Hashing is a foundational building block in many modern security technologies, including <strong>digital signatures</strong> and <strong>blockchain systems</strong>, making it an indispensable component of cybersecurity and data protection.
+      </p>
+
+      <!-- Use-case chips -->
+      <div class="info-stats reveal-stagger" style="margin-top:24px;">
+        <div class="stat-chip">
+          <span class="stat-val" style="font-size:18px;">🔑</span>
+          <span class="stat-label">Password storage</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-val" style="font-size:18px;">📦</span>
+          <span class="stat-label">File integrity</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-val" style="font-size:18px;">⛓️</span>
+          <span class="stat-label">Blockchain</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-val" style="font-size:18px;">✍️</span>
+          <span class="stat-label">Digital signatures</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: What would happen without them? -->
+    <div class="info-section reveal">
+      <div class="info-section-header">
+        <div class="info-section-icon icon-red">⚠️</div>
+        <div>
+          <div class="info-section-title">What would happen if we didn't use them?</div>
+          <div class="info-section-subtitle">The risks without hashing</div>
+        </div>
+      </div>
+      <hr class="info-divider">
+      <p class="info-section-body">
+        If hashing algorithms were not used, sensitive data such as passwords would often need to be stored in <strong>plain text</strong>, making systems highly vulnerable to breaches. If attackers gained access to a database, they could immediately read and misuse user credentials, leading to widespread account compromise and identity theft. Without hashing, there would be far fewer barriers preventing unauthorized access, significantly weakening overall cybersecurity.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        It would also be much harder to <strong>verify the integrity of data</strong>. Systems would lack a reliable way to detect whether files, messages, or transactions had been altered, increasing the risk of tampering and fraud. This would impact everything from software downloads to financial transactions, making secure communication far more difficult to achieve.
+      </p>
+      <div class="info-pullquote">
+        "Without hashing, a single database breach could instantly expose every user's password in plain text — affecting potentially millions of accounts simultaneously."
+      </div>
+    </div>
+
+    <!-- About this tool -->
+    <div class="about-tool-box reveal">
+      <div class="about-tool-box-icon">🛠️</div>
+      <div>
+        <h3>About HashLens</h3>
+        <p>HashLens is a client-side forensic tool built for cybersecurity students and analysts. It lets you:</p>
+        <ul>
+          <li>Identify the likely algorithm behind any unknown hash string</li>
+          <li>Generate MD5, SHA-1, SHA-256, and SHA-512 checksums from any file</li>
+          <li>Verify file integrity without sending data to any external server</li>
+        </ul>
+        <p style="margin-top:10px;">All computations run entirely in your browser using the <strong>Web Crypto API</strong> and a pure-JS MD5 implementation. Nothing ever leaves your device.</p>
+      </div>
+    </div>
+
+  </div><!-- end about-tool-box -->
+
+</div><!-- end page-info -->
+
+</main>
+
+<footer>
+  HashLens — All computations are performed client-side. No data leaves your browser. · For educational &amp; forensic use.
+</footer>
+
+<script>
+// ---- Hash type database ----
+const HASH_TYPES = [
+  { name: 'MD5',          bits: 128, len: 32,   regex: /^[a-f0-9]{32}$/i },
+  { name: 'SHA-1',        bits: 160, len: 40,   regex: /^[a-f0-9]{40}$/i },
+  { name: 'SHA-224',      bits: 224, len: 56,   regex: /^[a-f0-9]{56}$/i },
+  { name: 'SHA-256',      bits: 256, len: 64,   regex: /^[a-f0-9]{64}$/i },
+  { name: 'SHA-384',      bits: 384, len: 96,   regex: /^[a-f0-9]{96}$/i },
+  { name: 'SHA-512',      bits: 512, len: 128,  regex: /^[a-f0-9]{128}$/i },
+  { name: 'SHA-512/224',  bits: 224, len: 56,   regex: /^[a-f0-9]{56}$/i },
+  { name: 'SHA-512/256',  bits: 256, len: 64,   regex: /^[a-f0-9]{64}$/i },
+  { name: 'SHA3-224',     bits: 224, len: 56,   regex: /^[a-f0-9]{56}$/i },
+  { name: 'SHA3-256',     bits: 256, len: 64,   regex: /^[a-f0-9]{64}$/i },
+  { name: 'SHA3-384',     bits: 384, len: 96,   regex: /^[a-f0-9]{96}$/i },
+  { name: 'SHA3-512',     bits: 512, len: 128,  regex: /^[a-f0-9]{128}$/i },
+  { name: 'RIPEMD-128',   bits: 128, len: 32,   regex: /^[a-f0-9]{32}$/i },
+  { name: 'RIPEMD-160',   bits: 160, len: 40,   regex: /^[a-f0-9]{40}$/i },
+  { name: 'RIPEMD-256',   bits: 256, len: 64,   regex: /^[a-f0-9]{64}$/i },
+  { name: 'RIPEMD-320',   bits: 320, len: 80,   regex: /^[a-f0-9]{80}$/i },
+  { name: 'Whirlpool',    bits: 512, len: 128,  regex: /^[a-f0-9]{128}$/i },
+  { name: 'Tiger-192',    bits: 192, len: 48,   regex: /^[a-f0-9]{48}$/i },
+  { name: 'CRC32',        bits: 32,  len: 8,    regex: /^[a-f0-9]{8}$/i },
+  { name: 'Adler-32',     bits: 32,  len: 8,    regex: /^[a-f0-9]{8}$/i },
+  { name: 'BLAKE2b-256',  bits: 256, len: 64,   regex: /^[a-f0-9]{64}$/i },
+  { name: 'BLAKE2b-512',  bits: 512, len: 128,  regex: /^[a-f0-9]{128}$/i },
+  { name: 'bcrypt',       bits: null, len: null, regex: /^\$2[ayb]\$[0-9]{2}\$[./A-Za-z0-9]{53}$/ },
+  { name: 'MD4',          bits: 128, len: 32,   regex: /^[a-f0-9]{32}$/i },
+];
+
+const DISPLAY_TYPES = [
+  { name: 'MD5',     bits: '128-bit' },
+  { name: 'SHA-1',   bits: '160-bit' },
+  { name: 'SHA-224', bits: '224-bit' },
+  { name: 'SHA-256', bits: '256-bit' },
+  { name: 'SHA-384', bits: '384-bit' },
+  { name: 'SHA-512', bits: '512-bit' },
+  { name: 'RIPEMD-160', bits: '160-bit' },
+  { name: 'bcrypt',  bits: 'variable' },
+  { name: 'BLAKE2b', bits: '256/512-bit' },
+  { name: 'CRC32',   bits: '32-bit' },
+  { name: 'Tiger',   bits: '192-bit' },
+  { name: 'SHA3-*',  bits: '224–512-bit' },
+];
+
+// Render types grid
+const grid = document.getElementById('typesGrid');
+DISPLAY_TYPES.forEach(t => {
+  const el = document.createElement('div');
+  el.className = 'type-chip';
+  el.innerHTML = `<div class="name">${t.name}</div><div class="bits">${t.bits}</div>`;
+  grid.appendChild(el);
+});
+
+// ---- CAPTCHA ----
+// simple math challenge — nothing fancy, just stops accidental misuse
+const captchas = {
+  id:  { a: 0, b: 0, ok: false },
+  gen: { a: 0, b: 0, ok: false },
+};
+
+function newCaptcha(type) {
+  const a = Math.floor(Math.random() * 20) + 1;
+  const b = Math.floor(Math.random() * 20) + 1;
+
+  captchas[type].a = a;
+  captchas[type].b = b;
+  captchas[type].ok = false;
+
+  const suffix = type === 'id' ? 'Id' : 'Gen';
+  document.getElementById('captchaSum' + suffix).textContent = `${a} + ${b}`;
+  document.getElementById('captchaAnswer' + suffix).value = '';
+  document.getElementById('captchaStatus' + suffix).textContent = '';
+
+  if (type === 'gen') updateGenerateBtn();
+}
+
+function checkCaptcha(type) {
+  const suffix = type === 'id' ? 'Id' : 'Gen';
+  const answer = parseInt(document.getElementById('captchaAnswer' + suffix).value, 10);
+  const expected = captchas[type].a + captchas[type].b;
+  const statusEl = document.getElementById('captchaStatus' + suffix);
+
+  if (answer === expected) {
+    captchas[type].ok = true;
+    statusEl.textContent = '✓ Verified';
+    statusEl.className = 'captcha-status ok';
+  } else {
+    captchas[type].ok = false;
+    statusEl.textContent = answer ? '✗ Incorrect' : '';
+    statusEl.className = 'captcha-status err';
+  }
+
+  if (type === 'gen') updateGenerateBtn();
+}
+
+function updateGenerateBtn() {
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = !(captchas.gen.ok && selectedFile !== null);
+}
+
+// kick off a challenge for each panel on load
+newCaptcha('id');
+newCaptcha('gen');
+
+// ---- Theme toggle ----
+const root = document.documentElement;
+
+function applyTheme(dark) {
+  root.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('themeIcon').textContent = dark ? '☀️' : '🌙';
+  document.getElementById('themeToggle').lastChild.textContent = dark ? ' Light Mode' : ' Dark Mode';
+  try { localStorage.setItem('hashlens-theme', dark ? 'dark' : 'light'); } catch(e) {}
+}
+
+// restore saved preference on load
+(function() {
+  let saved = null;
+  try { saved = localStorage.getItem('hashlens-theme'); } catch(e) {}
+  if (saved) {
+    applyTheme(saved === 'dark');
+  } else {
+    // respect OS preference if no saved choice
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark);
+  }
+})();
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const currentlyDark = root.getAttribute('data-theme') === 'dark';
+  applyTheme(!currentlyDark);
+});
+
+// ---- Page toggle (tool ↔ info) ----
+function toggleInfoPage() {
+  const toolPage = document.getElementById('page-tool');
+  const infoPage = document.getElementById('page-info');
+  const btn      = document.getElementById('infoNavBtn');
+  const onInfo   = infoPage.classList.contains('active');
+
+  if (onInfo) {
+    // Go back to tool
+    infoPage.classList.remove('active');
+    toolPage.classList.add('active');
+    btn.textContent = 'ℹ️ Information page';
+    btn.classList.remove('active');
+  } else {
+    // Go to info page
+    toolPage.classList.remove('active');
+    infoPage.classList.add('active');
+    btn.innerHTML = '← Back to tool';
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Reset reveals so they animate in fresh each visit
+    document.querySelectorAll('#page-info .reveal, #page-info .reveal-stagger').forEach(el => {
+      el.classList.remove('in-view');
+    });
+    setTimeout(checkReveal, 80);
+  }
+}
+
+// ---- Tabs ----
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// ---- Hash Identification ----
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('visible');
+}
+
+function hideError(id) {
+  document.getElementById(id).classList.remove('visible');
+}
+
+function clearHash() {
+  document.getElementById('hashInput').value = '';
+  document.getElementById('idResult').classList.remove('visible');
+  hideError('idError');
+}
+
+function identifyHash() {
+  hideError('idError');
+  document.getElementById('idResult').classList.remove('visible');
+
+  if (!captchas.id.ok) {
+    showError('idError', 'Please complete the verification challenge first.');
+    return;
+  }
+
+  const raw = document.getElementById('hashInput').value.trim();
+
+  if (!raw) {
+    showError('idError', 'Please enter a hash string to identify.');
+    return;
+  }
+  if (raw.length < 8) {
+    showError('idError', 'Input too short to be a valid hash.');
+    return;
+  }
+
+  const spin = document.getElementById('idSpinner');
+  spin.classList.add('visible');
+
+  // small delay so the spinner actually shows before we block the thread
+  setTimeout(() => {
+    spin.classList.remove('visible');
+
+    const matches = HASH_TYPES.filter(t => t.regex.test(raw));
+
+    if (matches.length === 0) {
+      showError('idError', `Unknown hash format. Length: ${raw.length} chars (${raw.length * 4} bits). Not matching any known pattern.`);
+      return;
+    }
+
+    // prefer entries where the length matches exactly
+    const exact = matches.filter(t => t.len === raw.length || t.len === null);
+    const display = exact.length ? exact : matches;
+
+    document.getElementById('hashTypeDisplay').textContent = display.map(t => t.name).join(' / ');
+    document.getElementById('hashMeta').innerHTML = `
+      <span>📏 ${raw.length} hex chars</span>
+      <span>🔢 ${raw.length * 4} bits</span>
+      <span>✓ Valid hex format</span>
+      ${display.length > 1 ? `<span>⚠ ${display.length} possible algorithms</span>` : ''}
+    `;
+    document.getElementById('idResult').classList.add('visible');
+
+    // reset the captcha so each identification requires a fresh solve
+    newCaptcha('id');
+  }, 400);
+}
+
+// ---- File Hashing ----
+let selectedFile = null;
+
+const dropzone = document.getElementById('dropzone');
+
+dropzone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropzone.classList.add('dragover');
+});
+dropzone.addEventListener('dragleave', () => {
+  dropzone.classList.remove('dragover');
+});
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function handleFile(file) {
+  selectedFile = file;
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('fileSize').textContent = formatSize(file.size);
+  document.getElementById('fileInfo').classList.add('visible');
+  document.getElementById('hashResults').classList.remove('visible');
+  hideError('genError');
+  updateGenerateBtn();
+}
+
+function clearFile() {
+  selectedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('fileInfo').classList.remove('visible');
+  document.getElementById('hashResults').classList.remove('visible');
+  updateGenerateBtn();
+}
+
+// convert an ArrayBuffer to a lowercase hex string
+function bufferToHex(buf) {
+  return Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function generateHashes() {
+  if (!captchas.gen.ok) {
+    showError('genError', 'Please complete the verification challenge first.');
+    return;
+  }
+  if (!selectedFile) {
+    showError('genError', 'Please select a file first.');
+    return;
+  }
+
+  hideError('genError');
+
+  const btn      = document.getElementById('generateBtn');
+  const spin     = document.getElementById('genSpinner');
+  const progress = document.getElementById('progressWrap');
+  const fill     = document.getElementById('progressFill');
+  const ptext    = document.getElementById('progressText');
+  const results  = document.getElementById('hashResults');
+
+  btn.disabled = true;
+  spin.classList.add('visible');
+  progress.classList.add('visible');
+  results.classList.remove('visible');
+
+  const buffer = await selectedFile.arrayBuffer();
+
+  // SubtleCrypto doesn't support MD5, so we compute that one manually
+  const algos = [
+    { id: 'SHA-1',   webApi: 'SHA-1' },
+    { id: 'SHA-256', webApi: 'SHA-256' },
+    { id: 'SHA-512', webApi: 'SHA-512' },
+  ];
+
+  const hashes = {};
+
+  ptext.textContent = 'Computing MD5…';
+  fill.style.width = '10%';
+  await new Promise(r => setTimeout(r, 10));
+  hashes['MD5'] = md5(buffer);
+  fill.style.width = '30%';
+
+  let done = 0;
+  for (const algo of algos) {
+    ptext.textContent = `Computing ${algo.id}…`;
+    await new Promise(r => setTimeout(r, 10));
+    const digest = await crypto.subtle.digest(algo.webApi, buffer);
+    hashes[algo.id] = bufferToHex(digest);
+    done++;
+    fill.style.width = (30 + done * 20) + '%';
+  }
+
+  fill.style.width = '100%';
+  ptext.textContent = 'Done ✓';
+
+  results.innerHTML = Object.entries(hashes).map(([alg, val]) => `
+    <div class="hash-row">
+      <span class="hash-alg">${alg}</span>
+      <span class="hash-val" title="${val}">${val}</span>
+      <button class="copy-btn" onclick="copyHash(this, '${val}')">Copy</button>
+    </div>
+  `).join('');
+  results.classList.add('visible');
+
+  setTimeout(() => {
+    progress.classList.remove('visible');
+    spin.classList.remove('visible');
+    btn.disabled = false;
+  }, 800);
+
+  // reset so they have to re-verify for the next file
+  newCaptcha('gen');
+}
+
+function copyHash(btn, val) {
+  navigator.clipboard.writeText(val).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// ---- Scroll-reveal (IntersectionObserver) for the Information page ----
+function checkReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  document.querySelectorAll('#page-info .reveal, #page-info .reveal-stagger').forEach(el => {
+    observer.observe(el);
+  });
+}
+
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('#page-info .reveal:not(.in-view), #page-info .reveal-stagger:not(.in-view)').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 40) {
+      el.classList.add('in-view');
+    }
+  });
+}, { passive: true });
+
+// ---- MD5 Implementation ----
+// Pure JS port of the standard MD5 algorithm.
+// We need this because the Web Crypto API (SubtleCrypto) dropped MD5 support —
+// it's considered cryptographically broken, but we still need it for file integrity checks.
+function md5(buffer) {
+  const bytes = new Uint8Array(buffer);
+
+  function safeAdd(x, y) {
+    const lsw = (x & 0xFFFF) + (y & 0xFFFF);
+    return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xFFFF);
+  }
+  function bitRotate(num, cnt) { return (num << cnt) | (num >>> (32 - cnt)); }
+  function md5cmn(q, a, b, x, s, t) { return safeAdd(bitRotate(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b); }
+  function md5ff(a, b, c, d, x, s, t) { return md5cmn((b & c) | (~b & d), a, b, x, s, t); }
+  function md5gg(a, b, c, d, x, s, t) { return md5cmn((b & d) | (c & ~d), a, b, x, s, t); }
+  function md5hh(a, b, c, d, x, s, t) { return md5cmn(b ^ c ^ d, a, b, x, s, t); }
+  function md5ii(a, b, c, d, x, s, t) { return md5cmn(c ^ (b | ~d), a, b, x, s, t); }
+
+  const n = bytes.length;
+  const nBits = n * 8;
+
+  // pad the message to a multiple of 512 bits
+  const nBytes = Math.ceil((n + 9) / 64) * 64;
+  const padded = new Uint8Array(nBytes);
+  padded.set(bytes);
+  padded[n] = 0x80;
+
+  const view = new DataView(padded.buffer);
+  view.setUint32(nBytes - 8, nBits & 0xFFFFFFFF, true);
+  view.setUint32(nBytes - 4, Math.floor(nBits / 0x100000000), true);
+
+  // initial hash values
+  let a = 0x67452301;
+  let b = 0xEFCDAB89;
+  let c = 0x98BADCFE;
+  let d = 0x10325476;
+
+  for (let i = 0; i < nBytes / 4; i += 16) {
+    const M = [];
+    for (let j = 0; j < 16; j++) M[j] = view.getInt32((i + j) * 4, true);
+
+    const [aa, bb, cc, dd] = [a, b, c, d];
+
+    // Round 1
+    a=md5ff(a,b,c,d,M[0], 7,-680876936);  d=md5ff(d,a,b,c,M[1], 12,-389564586);
+    c=md5ff(c,d,a,b,M[2], 17,606105819);  b=md5ff(b,c,d,a,M[3], 22,-1044525330);
+    a=md5ff(a,b,c,d,M[4], 7,-176418897);  d=md5ff(d,a,b,c,M[5], 12,1200080426);
+    c=md5ff(c,d,a,b,M[6], 17,-1473231341); b=md5ff(b,c,d,a,M[7], 22,-45705983);
+    a=md5ff(a,b,c,d,M[8], 7,1770035416);  d=md5ff(d,a,b,c,M[9], 12,-1958414417);
+    c=md5ff(c,d,a,b,M[10],17,-42063);      b=md5ff(b,c,d,a,M[11],22,-1990404162);
+    a=md5ff(a,b,c,d,M[12],7,1804603682);  d=md5ff(d,a,b,c,M[13],12,-40341101);
+    c=md5ff(c,d,a,b,M[14],17,-1502002290); b=md5ff(b,c,d,a,M[15],22,1236535329);
+
+    // Round 2
+    a=md5gg(a,b,c,d,M[1], 5,-165796510);  d=md5gg(d,a,b,c,M[6], 9,-1069501632);
+    c=md5gg(c,d,a,b,M[11],14,643717713);  b=md5gg(b,c,d,a,M[0], 20,-373897302);
+    a=md5gg(a,b,c,d,M[5], 5,-701558691);  d=md5gg(d,a,b,c,M[10],9,38016083);
+    c=md5gg(c,d,a,b,M[15],14,-660478335); b=md5gg(b,c,d,a,M[4], 20,-405537848);
+    a=md5gg(a,b,c,d,M[9], 5,568446438);   d=md5gg(d,a,b,c,M[14],9,-1019803690);
+    c=md5gg(c,d,a,b,M[3], 14,-187363961); b=md5gg(b,c,d,a,M[8], 20,1163531501);
+    a=md5gg(a,b,c,d,M[13],5,-1444681467); d=md5gg(d,a,b,c,M[2], 9,-51403784);
+    c=md5gg(c,d,a,b,M[7], 14,1735328473); b=md5gg(b,c,d,a,M[12],20,-1926607734);
+
+    // Round 3
+    a=md5hh(a,b,c,d,M[5], 4,-378558);     d=md5hh(d,a,b,c,M[8], 11,-2022574463);
+    c=md5hh(c,d,a,b,M[11],16,1839030562); b=md5hh(b,c,d,a,M[14],23,-35309556);
+    a=md5hh(a,b,c,d,M[1], 4,-1530992060); d=md5hh(d,a,b,c,M[4], 11,1272893353);
+    c=md5hh(c,d,a,b,M[7], 16,-155497632); b=md5hh(b,c,d,a,M[10],23,-1094730640);
+    a=md5hh(a,b,c,d,M[13],4,681279174);   d=md5hh(d,a,b,c,M[0], 11,-358537222);
+    c=md5hh(c,d,a,b,M[3], 16,-722521979); b=md5hh(b,c,d,a,M[6], 23,76029189);
+    a=md5hh(a,b,c,d,M[9], 4,-640364487);  d=md5hh(d,a,b,c,M[12],11,-421815835);
+    c=md5hh(c,d,a,b,M[15],16,530742520);  b=md5hh(b,c,d,a,M[2], 23,-995338651);
+
+    // Round 4
+    a=md5ii(a,b,c,d,M[0], 6,-198630844);  d=md5ii(d,a,b,c,M[7], 10,1126891415);
+    c=md5ii(c,d,a,b,M[14],15,-1416354905); b=md5ii(b,c,d,a,M[5], 21,-57434055);
+    a=md5ii(a,b,c,d,M[12],6,1700485571);  d=md5ii(d,a,b,c,M[3], 10,-1894986606);
+    c=md5ii(c,d,a,b,M[10],15,-1051523);   b=md5ii(b,c,d,a,M[1], 21,-2054922799);
+    a=md5ii(a,b,c,d,M[8], 6,1873313359);  d=md5ii(d,a,b,c,M[15],10,-30611744);
+    c=md5ii(c,d,a,b,M[6], 15,-1560198380); b=md5ii(b,c,d,a,M[13],21,1309151649);
+    a=md5ii(a,b,c,d,M[4], 6,-145523070);  d=md5ii(d,a,b,c,M[11],10,-1120210379);
+    c=md5ii(c,d,a,b,M[2], 15,718787259);  b=md5ii(b,c,d,a,M[9], 21,-343485551);
+
+    a = safeAdd(a, aa);
+    b = safeAdd(b, bb);
+    c = safeAdd(c, cc);
+    d = safeAdd(d, dd);
+  }
+
+  const out = new DataView(new ArrayBuffer(16));
+  out.setInt32(0,  a, true);
+  out.setInt32(4,  b, true);
+  out.setInt32(8,  c, true);
+  out.setInt32(12, d, true);
+  return bufferToHex(out.buffer);
+}
+</script>
+</body>
+</html>
