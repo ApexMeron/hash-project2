@@ -114,6 +114,31 @@
   }
   .theme-btn:hover { border-color: var(--accent); color: var(--text); }
 
+  /* Information page nav button in header */
+  .info-nav-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    font-family: var(--sans);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.2px;
+  }
+  .info-nav-btn:hover { background: #b33d26; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(200,75,49,0.3); }
+  .info-nav-btn.active { background: #1a1714; }
+  [data-theme="dark"] .info-nav-btn.active { background: #f0ece4; color: #1a1714; }
+
+  /* Page views */
+  .page { display: none; }
+  .page.active { display: block; }
+
   /* Main */
   main {
     max-width: 960px;
@@ -569,6 +594,199 @@
     .hash-row { flex-wrap: wrap; }
     .hash-val { min-width: 100%; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
   }
+
+  /* =============================================
+     INFORMATION PAGE STYLES (new — added below)
+     ============================================= */
+
+  /* Scroll-reveal base state: hidden and shifted down */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Once the IntersectionObserver fires, this class makes it visible */
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger children inside a reveal container */
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-stagger.in-view > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay: 0s; }
+  .reveal-stagger.in-view > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay: 0.1s; }
+  .reveal-stagger.in-view > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay: 0.2s; }
+  .reveal-stagger.in-view > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay: 0.3s; }
+
+  /* Info page hero banner */
+  .info-page-hero {
+    background: linear-gradient(135deg, var(--accent) 0%, #a0341f 100%);
+    border-radius: 14px;
+    padding: 48px 36px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .info-page-hero::before {
+    content: '#';
+    position: absolute;
+    right: 24px;
+    top: -10px;
+    font-family: var(--mono);
+    font-size: 180px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .info-page-hero h2 {
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .info-page-hero p {
+    color: rgba(255,255,255,0.75);
+    font-size: 14px;
+    max-width: 520px;
+  }
+
+  /* Section blocks */
+  .info-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    margin-bottom: 20px;
+  }
+
+  .info-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .info-section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .icon-blue  { background: #eff6ff; }
+  .icon-green { background: var(--green-soft); }
+  .icon-red   { background: var(--accent-soft); }
+  [data-theme="dark"] .icon-blue  { background: #1e3a5f; }
+  [data-theme="dark"] .icon-green { background: #142a1e; }
+  [data-theme="dark"] .icon-red   { background: #2a1a17; }
+
+  .info-section-title {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .info-section-subtitle {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .info-section-body {
+    font-size: 14.5px;
+    color: var(--text2);
+    line-height: 1.75;
+  }
+  .info-section-body strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* Pull-quote / highlight stripe */
+  .info-pullquote {
+    border-left: 3px solid var(--accent);
+    padding: 12px 18px;
+    background: var(--accent-soft);
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0 0;
+    font-size: 13.5px;
+    color: var(--text);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* Stats row */
+  .info-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .stat-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-chip .stat-val {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .stat-chip .stat-label {
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Divider line between sections */
+  .info-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0 20px;
+    border: none;
+  }
+
+  /* About-this-tool box at the bottom */
+  .about-tool-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .about-tool-box-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .about-tool-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .about-tool-box p  { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .about-tool-box ul {
+    margin-top: 10px;
+    padding-left: 18px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
 </style>
 </head>
 <body>
@@ -583,6 +801,9 @@
     </div>
     <div class="header-right">
       <span class="badge">Forensic Tool</span>
+      <button class="info-nav-btn" id="infoNavBtn" onclick="toggleInfoPage()">
+        ℹ️ Information page
+      </button>
       <button class="theme-btn" id="themeToggle">
         <span id="themeIcon">🌙</span> Dark Mode
       </button>
@@ -620,6 +841,9 @@
     </button>
     <button class="tab-btn" data-tab="generate" onclick="switchTab('generate', this)">
       ⚡ Generate Hashes
+    </button>
+    <button class="tab-btn" data-tab="info" onclick="switchTab('info', this)">
+      ℹ️ Information
     </button>
   </div>
 
@@ -709,6 +933,145 @@
       <div class="hash-results" id="hashResults"></div>
     </div>
   </div>
+
+  <!-- =============================================
+       INFORMATION PANEL (new)
+       ============================================= -->
+  <div class="panel" id="tab-info">
+
+    <!-- Hero banner -->
+    <div class="info-page-hero reveal">
+      <h2>Understanding Hashing Algorithms</h2>
+      <p>Everything you need to know about cryptographic hash functions — what they are, why they matter, and what the world would look like without them.</p>
+    </div>
+
+    <!-- Stats row -->
+    <div class="info-stats reveal" style="margin-bottom:20px;">
+      <div class="stat-chip">
+        <span class="stat-val">MD5</span>
+        <span class="stat-label">128-bit output</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val">SHA-256</span>
+        <span class="stat-label">256-bit output</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val">2<sup style="font-size:14px">256</sup></span>
+        <span class="stat-label">SHA-256 combinations</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val">1-way</span>
+        <span class="stat-label">Cannot be reversed</span>
+      </div>
+    </div>
+
+    <!-- Section 1: What are hashing algorithms? -->
+    <div class="info-section reveal">
+      <div class="info-section-header">
+        <div class="info-section-icon icon-blue">🔢</div>
+        <div>
+          <div class="info-section-title">What are hashing algorithms?</div>
+          <div class="info-section-subtitle">Core concept</div>
+        </div>
+      </div>
+      <hr class="info-divider">
+      <p class="info-section-body">
+        Hashing algorithms are <strong>mathematical functions</strong> that take an input — like a file, password, or message — and convert it into a fixed-length string of characters. This is known as a <strong>hash value</strong> or <strong>digest</strong>. Regardless of the size of the input, the output is always the same length, and even a tiny change in the input will produce a completely different hash.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        Examples of common hashing algorithms include <strong>MD5</strong>, <strong>SHA-1</strong>, and <strong>SHA-256</strong>, each designed to be fast, deterministic, and difficult to reverse. They are used in cybersecurity for tasks such as securely storing passwords, verifying data integrity, and detecting tampering.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        For example, when a password is stored, only its hash is saved rather than the original text, improving security. Similarly, hashes can be used to confirm that a file has not been altered by comparing its current hash to a known original value.
+      </p>
+      <div class="info-pullquote">
+        "Even a single character change in the input produces a completely different hash output — this is known as the <strong>avalanche effect</strong>."
+      </div>
+    </div>
+
+    <!-- Section 2: Why are they important? -->
+    <div class="info-section reveal">
+      <div class="info-section-header">
+        <div class="info-section-icon icon-green">🛡️</div>
+        <div>
+          <div class="info-section-title">Why are they important?</div>
+          <div class="info-section-subtitle">Security & integrity</div>
+        </div>
+      </div>
+      <hr class="info-divider">
+      <p class="info-section-body">
+        Hashing algorithms are important because they play a key role in <strong>protecting sensitive information</strong> and maintaining security in digital systems. By converting data such as passwords into hash values, systems avoid storing the original information in plain text, which reduces the risk of exposure if a database is compromised.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        Even if attackers gain access to hashed data, reversing it back to the original input is extremely difficult, especially when strong algorithms are used.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        They are also essential for <strong>ensuring data integrity and trust</strong>. Hashes allow systems to quickly verify that files, messages, or transactions have not been altered, which is critical in areas like software distribution, digital forensics, and secure communications.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        Hashing is a foundational building block in many modern security technologies, including <strong>digital signatures</strong> and <strong>blockchain systems</strong>, making it an indispensable component of cybersecurity and data protection.
+      </p>
+
+      <!-- Use-case chips -->
+      <div class="info-stats reveal-stagger" style="margin-top:24px;">
+        <div class="stat-chip">
+          <span class="stat-val" style="font-size:18px;">🔑</span>
+          <span class="stat-label">Password storage</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-val" style="font-size:18px;">📦</span>
+          <span class="stat-label">File integrity</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-val" style="font-size:18px;">⛓️</span>
+          <span class="stat-label">Blockchain</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-val" style="font-size:18px;">✍️</span>
+          <span class="stat-label">Digital signatures</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: What would happen without them? -->
+    <div class="info-section reveal">
+      <div class="info-section-header">
+        <div class="info-section-icon icon-red">⚠️</div>
+        <div>
+          <div class="info-section-title">What would happen if we didn't use them?</div>
+          <div class="info-section-subtitle">The risks without hashing</div>
+        </div>
+      </div>
+      <hr class="info-divider">
+      <p class="info-section-body">
+        If hashing algorithms were not used, sensitive data such as passwords would often need to be stored in <strong>plain text</strong>, making systems highly vulnerable to breaches. If attackers gained access to a database, they could immediately read and misuse user credentials, leading to widespread account compromise and identity theft. Without hashing, there would be far fewer barriers preventing unauthorized access, significantly weakening overall cybersecurity.
+      </p>
+      <p class="info-section-body" style="margin-top:14px;">
+        It would also be much harder to <strong>verify the integrity of data</strong>. Systems would lack a reliable way to detect whether files, messages, or transactions had been altered, increasing the risk of tampering and fraud. This would impact everything from software downloads to financial transactions, making secure communication far more difficult to achieve.
+      </p>
+      <div class="info-pullquote">
+        "Without hashing, a single database breach could instantly expose every user's password in plain text — affecting potentially millions of accounts simultaneously."
+      </div>
+    </div>
+
+    <!-- About this tool -->
+    <div class="about-tool-box reveal">
+      <div class="about-tool-box-icon">🛠️</div>
+      <div>
+        <h3>About HashLens</h3>
+        <p>HashLens is a client-side forensic tool built for cybersecurity students and analysts. It lets you:</p>
+        <ul>
+          <li>Identify the likely algorithm behind any unknown hash string</li>
+          <li>Generate MD5, SHA-1, SHA-256, and SHA-512 checksums from any file</li>
+          <li>Verify file integrity without sending data to any external server</li>
+        </ul>
+        <p style="margin-top:10px;">All computations run entirely in your browser using the <strong>Web Crypto API</strong> and a pure-JS MD5 implementation. Nothing ever leaves your device.</p>
+      </div>
+    </div>
+
+  </div>
+  <!-- end tab-info -->
+
 </main>
 
 <footer>
@@ -853,6 +1216,11 @@ function switchTab(tab, btn) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
+
+  // Trigger scroll-reveal check when switching to the info tab
+  if (tab === 'info') {
+    setTimeout(checkReveal, 50);
+  }
 }
 
 // ---- Hash Identification ----
@@ -1056,6 +1424,36 @@ function copyHash(btn, val) {
     }, 2000);
   });
 }
+
+// ---- Scroll-reveal (IntersectionObserver) for the Information tab ----
+function checkReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target); // fire once only
+      }
+    });
+  }, {
+    threshold: 0.12,   // trigger when 12% of the element is visible
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  // Observe every .reveal and .reveal-stagger inside the info panel
+  document.querySelectorAll('#tab-info .reveal, #tab-info .reveal-stagger').forEach(el => {
+    observer.observe(el);
+  });
+}
+
+// Also run on normal scroll in case items are already partly in view
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('#tab-info .reveal:not(.in-view), #tab-info .reveal-stagger:not(.in-view)').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 40) {
+      el.classList.add('in-view');
+    }
+  });
+}, { passive: true });
 
 // ---- MD5 Implementation ----
 // Pure JS port of the standard MD5 algorithm.
